@@ -21,9 +21,9 @@ const initialState: GameState = {
 };
 
 function calcDamage(atk: number, def: number, correct: boolean): number {
-  const base = Math.max(1, Math.floor((atk / def) * 15));
-  const variance = Math.floor(Math.random() * 5);
-  return correct ? base + variance : Math.max(1, Math.floor((base + variance) * 0.15));
+  const base = Math.max(1, Math.floor((atk / def) * 25)); // 15→25 で正解ダメージ増加
+  const variance = Math.floor(Math.random() * 8);
+  return correct ? base + variance : Math.max(1, Math.floor((base + variance) * 0.12));
 }
 
 function levelUpPokemon(pokemon: OwnedPokemon): OwnedPokemon {
@@ -72,13 +72,30 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return { ...state, stepCount: state.stepCount + 1, stepsTillEncounter: next };
     }
 
-    case 'START_ENCOUNTER':
+    case 'START_ENCOUNTER': {
+      const activePokemon = state.party[state.activePokemonIndex];
+      const wild = action.wild;
+      const battleState: BattleState = {
+        wild,
+        playerPokemonIndex: state.activePokemonIndex,
+        playerHp: activePokemon.maxHp,
+        wildHp: wild.maxHp,
+        currentQuestion: action.question,
+        answerResult: null,
+        phase: 'quiz',
+        result: null,
+        log: [`野生の ${wild.name.toUpperCase()} が現れた！`, '問題に正解してダメージを与えよう！'],
+        canCatch: false,
+        turnCount: 0,
+      };
       return {
         ...state,
-        wildEncounter: action.wild,
-        encounterQuestion: action.question,
-        screen: 'encounter',
+        wildEncounter: wild,
+        encounterQuestion: null,
+        screen: 'battle',
+        battle: battleState,
       };
+    }
 
     case 'ENCOUNTER_ANSWER': {
       if (action.correct) {

@@ -1,13 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGame } from '../context/GameContext';
 import { STARTERS, buildOwnedPokemon } from '../services/pokeapi';
+
+const CHARMANDER_ID = 4;
 
 export default function StarterSelect() {
   const { dispatch } = useGame();
   const [name, setName] = useState('');
-  const [selected, setSelected] = useState<number | null>(null);
+  const [selected, setSelected] = useState<number>(CHARMANDER_ID);
   const [loading, setLoading] = useState(false);
   const [previews, setPreviews] = useState<Record<number, string>>({});
+
+  // ヒトカゲを起動時に自動選択・プレビュー取得
+  useEffect(() => {
+    fetch(`https://pokeapi.co/api/v2/pokemon/${CHARMANDER_ID}`)
+      .then((r) => r.json())
+      .then((data) => setPreviews((p) => ({ ...p, [CHARMANDER_ID]: data.sprites.front_default })));
+  }, []);
 
   const handleSelect = async (id: number) => {
     setSelected(id);
@@ -19,7 +28,7 @@ export default function StarterSelect() {
   };
 
   const handleStart = async () => {
-    if (!name.trim() || selected === null) return;
+    if (!name.trim()) return;
     setLoading(true);
     try {
       const pokemon = await buildOwnedPokemon(selected, 5);
@@ -48,11 +57,12 @@ export default function StarterSelect() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           maxLength={12}
+          onKeyDown={(e) => e.key === 'Enter' && handleStart()}
         />
       </div>
 
       <p className="font-pixel text-xs text-gray-400 mb-0.5">CHOOSE YOUR PARTNER</p>
-      <p className="text-xs text-gray-500 mb-4">最初のパートナーを選ぼう</p>
+      <p className="text-xs text-gray-500 mb-4">最初のパートナーを選ぼう（ヒトカゲが選ばれています）</p>
 
       <div className="flex gap-3 w-full mb-8">
         {STARTERS.map((s, i) => (
@@ -78,9 +88,9 @@ export default function StarterSelect() {
 
       <button
         onClick={handleStart}
-        disabled={!name.trim() || selected === null || loading}
+        disabled={!name.trim() || loading}
         className={`w-full py-4 rounded-xl font-pixel text-sm transition-all ${
-          !name.trim() || selected === null || loading
+          !name.trim() || loading
             ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
             : 'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-600/30 active:scale-95'
         }`}
@@ -89,10 +99,10 @@ export default function StarterSelect() {
       </button>
 
       <p className="text-gray-500 text-xs mt-6 text-center leading-relaxed">
-        Walk around to encounter wild Pokémon.<br />
-        <span className="text-gray-600">歩いて野生ポケモンに出会おう。</span><br />
-        Answer English questions to battle!<br />
-        <span className="text-gray-600">英語の問題に答えてバトルしよう！</span>
+        歩いて野生ポケモンに出会おう。<br />
+        <span className="text-gray-600">Walk around to encounter wild Pokémon.</span><br />
+        英語の問題に正解して倒してゲットしよう！<br />
+        <span className="text-gray-600">Answer correctly to defeat and catch them!</span>
       </p>
     </div>
   );
