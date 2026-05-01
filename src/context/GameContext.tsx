@@ -87,7 +87,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         const battleState: BattleState = {
           wild,
           playerPokemonIndex: state.activePokemonIndex,
-          playerHp: activePokemon.hp,
+          playerHp: activePokemon.maxHp,
           wildHp: wild.maxHp,
           currentQuestion: action.nextQuestion,
           answerResult: null,
@@ -156,10 +156,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         };
       }
 
-      // Wild's turn after player attack
-      const wildDamage = calcDamage(b.wild.attack, pokemon.defense, true);
+      // Wild's turn: correct answer halves wild's counter-attack
+      const wildDamage = Math.max(1, Math.floor(
+        calcDamage(b.wild.attack, pokemon.defense, true) * (action.correct ? 0.5 : 1.0)
+      ));
       const newPlayerHp = Math.max(0, b.playerHp - wildDamage);
-      const wildMsg = `野生の ${b.wild.name.toUpperCase()} の攻撃！ ${wildDamage} ダメージ！`;
+      const wildMsg = action.correct
+        ? `野生の ${b.wild.name.toUpperCase()} の反撃！ ${wildDamage} ダメージ（正解で半減）`
+        : `野生の ${b.wild.name.toUpperCase()} の攻撃！ ${wildDamage} ダメージ！`;
 
       if (newPlayerHp <= 0) {
         // Faint: set HP to 1 (not 0) so player isn't stuck
