@@ -33,6 +33,7 @@ export interface Question {
   contextJa?: string;
   question: string;
   choices: [string, string, string, string];
+  choicesJa?: [string, string, string, string];
   correctIndex: 0 | 1 | 2 | 3;
   explanation: string;
   explanationJa?: string;

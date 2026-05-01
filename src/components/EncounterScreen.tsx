@@ -94,6 +94,9 @@ export default function EncounterScreen() {
               >
                 <span className="font-pixel text-xs mr-2 text-gray-400">{choiceLabels[i]}.</span>
                 <span className="text-sm">{choice}</span>
+                {question.choicesJa?.[i] && (
+                  <span className="block text-xs text-gray-400 mt-0.5 ml-5">{question.choicesJa[i]}</span>
+                )}
               </button>
             );
           })}

@@ -165,7 +165,10 @@ export default function BattleScreen() {
                   className={`w-full text-left border-2 rounded-xl px-3 py-2.5 transition-all active:scale-95 ${btnClass}`}
                 >
                   <span className="font-pixel text-xs mr-2 text-gray-400">{choiceLabels[i]}.</span>
-                  <span className="text-sm">{choice}</span>
+<span className="text-sm">{choice}</span>
+                  {question.choicesJa?.[i] && (
+                    <span className="block text-xs text-gray-400 mt-0.5 ml-5">{question.choicesJa[i]}</span>
+                  )}
                 </button>
               );
             })}
