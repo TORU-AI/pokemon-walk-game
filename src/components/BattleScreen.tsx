@@ -27,7 +27,6 @@ export default function BattleScreen() {
   const [selected, setSelected] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);
 
-  // キーボード 1-4 / A-D で回答
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (battle.phase === 'over') {
@@ -115,10 +114,10 @@ export default function BattleScreen() {
           <div className={`text-center p-6 rounded-2xl border-2 w-full ${battle.result === 'win' ? 'bg-green-900/40 border-green-500' : 'bg-red-900/40 border-red-500'}`}>
             <div className="font-pixel text-2xl mb-2">{battle.result === 'win' ? '🏆' : '💔'}</div>
             <div className={`font-pixel text-sm mb-1 ${battle.result === 'win' ? 'text-green-400' : 'text-red-400'}`}>
-              {battle.result === 'win' ? 'VICTORY!' : 'DEFEAT...'}
+              {battle.result === 'win' ? '勝利！ VICTORY!' : '敗北… DEFEAT...'}
             </div>
             {battle.result === 'win' && (
-              <p className="text-xs text-gray-300">+{battle.wild.level * 30} XP gained!</p>
+              <p className="text-xs text-gray-300">+{battle.wild.level * 30} XP 獲得！</p>
             )}
           </div>
 
@@ -127,7 +126,7 @@ export default function BattleScreen() {
               onClick={() => dispatch({ type: 'CATCH_POKEMON' })}
               className="w-full py-3 bg-red-600 hover:bg-red-500 text-white rounded-xl font-pixel text-xs transition-all active:scale-95"
             >
-              CATCH {battle.wild.name.toUpperCase()}!
+              {battle.wild.name.toUpperCase()} をつかまえる！ CATCH!
             </button>
           )}
 
@@ -135,15 +134,18 @@ export default function BattleScreen() {
             onClick={() => dispatch({ type: 'FLEE' })}
             className="w-full py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-xl font-pixel text-xs transition-all active:scale-95"
           >
-            {battle.result === 'win' ? 'BACK TO MAP' : 'RUN AWAY'}
+            {battle.result === 'win' ? 'マップへ戻る / BACK TO MAP' : 'にげる / RUN AWAY'}
           </button>
         </div>
       ) : (
         /* Quiz panel */
         <div className="flex-1 px-4 pt-3 overflow-y-auto">
           <div className="bg-gray-800/60 rounded-xl p-3 mb-3 border border-gray-700">
-            <p className="text-xs text-gray-400 mb-1 font-pixel">QUESTION</p>
+            <p className="text-xs text-gray-400 mb-1 font-pixel">QUESTION / 問題</p>
             <p className="text-xs text-gray-300 mb-1 italic">{question.context}</p>
+            {question.contextJa && (
+              <p className="text-xs text-gray-500 mb-1">【{question.contextJa}】</p>
+            )}
             <p className="text-sm text-white font-semibold">{question.question}</p>
           </div>
 
@@ -171,8 +173,13 @@ export default function BattleScreen() {
 
           {revealed && (
             <div className={`mt-3 rounded-xl p-3 border ${selected === question.correctIndex ? 'bg-green-900/40 border-green-600' : 'bg-red-900/40 border-red-600'}`}>
-              <p className="font-pixel text-xs mb-1">{selected === question.correctIndex ? '✓ CORRECT! FULL POWER!' : '✗ WRONG! WEAK HIT!'}</p>
-              <p className="text-xs text-gray-300">{question.explanation}</p>
+              <p className="font-pixel text-xs mb-1">
+                {selected === question.correctIndex ? '✓ 正解！ CORRECT! フルパワー！' : '✗ 不正解！ WRONG! ダメージ小！'}
+              </p>
+              <p className="text-xs text-gray-300 mb-1">{question.explanation}</p>
+              {question.explanationJa && (
+                <p className="text-xs text-gray-400">📘 {question.explanationJa}</p>
+              )}
             </div>
           )}
         </div>
@@ -185,7 +192,7 @@ export default function BattleScreen() {
             onClick={() => dispatch({ type: 'FLEE' })}
             className="w-full py-2 bg-gray-800 hover:bg-gray-700 text-gray-400 rounded-xl font-pixel text-xs transition-all active:scale-95"
           >
-            FLEE
+            にげる / FLEE
           </button>
         </div>
       )}

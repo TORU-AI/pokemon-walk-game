@@ -10,7 +10,6 @@ export default function EncounterScreen() {
   const [selected, setSelected] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);
 
-  // キーボード 1-4 / A-D で回答
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const map: Record<string, number> = { '1': 0, '2': 1, '3': 2, '4': 3, 'a': 0, 'b': 1, 'c': 2, 'd': 3 };
@@ -66,13 +65,17 @@ export default function EncounterScreen() {
 
       {/* Message box */}
       <div className="mx-4 -mt-2 bg-gray-800 border-2 border-gray-600 rounded-xl p-4 mb-4">
-        <p className="text-xs text-gray-400 mb-1">Wild {wild.name.toUpperCase()} speaks to you!</p>
+        <p className="text-xs text-yellow-400 mb-1 font-pixel">野生の {wild.name.toUpperCase()} が話しかけてきた！</p>
+        <p className="text-xs text-gray-500 mb-2">Wild {wild.name.toUpperCase()} speaks to you!</p>
         <p className="text-sm text-gray-200 italic">"{question.context}"</p>
+        {question.contextJa && (
+          <p className="text-xs text-gray-400 mt-1">【{question.contextJa}】</p>
+        )}
       </div>
 
       {/* Quiz */}
       <div className="flex-1 px-4 overflow-y-auto">
-        <p className="font-pixel text-xs text-yellow-400 mb-3">{question.question}</p>
+        <p className="font-pixel text-xs text-yellow-400 mb-1">{question.question}</p>
 
         <div className="flex flex-col gap-2">
           {question.choices.map((choice, i) => {
@@ -99,11 +102,14 @@ export default function EncounterScreen() {
         {revealed && (
           <div className={`mt-4 rounded-xl p-3 border ${selected === question.correctIndex ? 'bg-green-900/40 border-green-600' : 'bg-red-900/40 border-red-600'}`}>
             <p className="font-pixel text-xs mb-1">
-              {selected === question.correctIndex ? '✓ CORRECT!' : '✗ WRONG!'}
+              {selected === question.correctIndex ? '✓ 正解！ CORRECT!' : '✗ 不正解！ WRONG!'}
             </p>
-            <p className="text-xs text-gray-300">{question.explanation}</p>
+            <p className="text-xs text-gray-300 mb-1">{question.explanation}</p>
+            {question.explanationJa && (
+              <p className="text-xs text-gray-400">📘 {question.explanationJa}</p>
+            )}
             {selected !== question.correctIndex && (
-              <p className="text-xs text-gray-400 mt-1">Try again with a new question...</p>
+              <p className="text-xs text-yellow-600 mt-1">もう一度挑戦しよう！ Try again...</p>
             )}
           </div>
         )}
@@ -115,7 +121,7 @@ export default function EncounterScreen() {
           onClick={() => dispatch({ type: 'FLEE' })}
           className="w-full py-3 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-xl font-pixel text-xs transition-all active:scale-95"
         >
-          RUN AWAY
+          にげる / RUN AWAY
         </button>
       </div>
     </div>

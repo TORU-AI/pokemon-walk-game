@@ -17,18 +17,21 @@ export default function PartyScreen() {
   return (
     <div className="flex flex-col h-full bg-gray-900 text-white">
       <div className="flex items-center justify-between px-4 py-4 border-b border-gray-700">
-        <h2 className="font-pixel text-sm text-yellow-400">MY PARTY</h2>
+        <div>
+          <h2 className="font-pixel text-sm text-yellow-400">手持ちポケモン</h2>
+          <p className="text-gray-500 text-xs mt-0.5">MY PARTY</p>
+        </div>
         <button
           onClick={() => dispatch({ type: 'CLOSE_PARTY' })}
           className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg font-pixel text-xs transition-all"
         >
-          CLOSE
+          とじる / CLOSE
         </button>
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3">
         {state.party.length === 0 && (
-          <p className="text-gray-500 text-center font-pixel text-xs mt-12">No Pokémon yet!</p>
+          <p className="text-gray-500 text-center font-pixel text-xs mt-12">まだポケモンがいない！<br />No Pokémon yet!</p>
         )}
         {state.party.map((pokemon, i) => (
           <button
@@ -51,7 +54,7 @@ export default function PartyScreen() {
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-pixel text-sm capitalize">{pokemon.name}</span>
                   {i === state.activePokemonIndex && (
-                    <span className="bg-yellow-500 text-black text-xs px-1.5 py-0.5 rounded font-bold">ACTIVE</span>
+                    <span className="bg-yellow-500 text-black text-xs px-1.5 py-0.5 rounded font-bold">せんとう中</span>
                   )}
                 </div>
                 <div className="flex gap-1 mt-1 flex-wrap">
@@ -77,8 +80,8 @@ export default function PartyScreen() {
                   </div>
                 </div>
                 <div className="flex gap-4 mt-2 text-xs text-gray-400">
-                  <span>ATK: {pokemon.attack}</span>
-                  <span>DEF: {pokemon.defense}</span>
+                  <span>こうげき: {pokemon.attack}</span>
+                  <span>ぼうぎょ: {pokemon.defense}</span>
                 </div>
               </div>
             </div>
@@ -87,7 +90,7 @@ export default function PartyScreen() {
       </div>
 
       <div className="px-4 py-3 border-t border-gray-700 text-center">
-        <p className="text-gray-500 text-xs font-pixel">{state.party.length}/6 Pokémon</p>
+        <p className="text-gray-500 text-xs font-pixel">{state.party.length}/6 ポケモン</p>
       </div>
     </div>
   );

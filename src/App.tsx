@@ -52,7 +52,7 @@ export default function App() {
         {/* PC用: 上部にゲームタイトルバー */}
         {!isTouch && (
           <div className="absolute top-0 left-0 right-0 h-8 bg-gray-800 flex items-center justify-center z-50 rounded-t-[34px] border-b border-gray-700">
-            <span className="font-pixel text-yellow-400 text-xs">PokéWalk English</span>
+            <span className="font-pixel text-yellow-400 text-xs">PokéWalk English 英語冒険</span>
           </div>
         )}
 
@@ -84,7 +84,7 @@ export default function App() {
           {isTouch && !landscape && state.screen === 'map' && (
             <div className="absolute bottom-[88px] left-1/2 -translate-x-1/2 pointer-events-none">
               <div className="bg-black/40 backdrop-blur rounded-full px-3 py-1 text-gray-400 text-xs whitespace-nowrap">
-                📱 横向きで3Dモード
+                📱 横向きで3Dモード / Rotate for 3D
               </div>
             </div>
           )}
@@ -93,7 +93,7 @@ export default function App() {
           {!isTouch && state.screen === 'map' && (
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none">
               <div className="bg-black/50 backdrop-blur rounded-full px-3 py-1 text-gray-500 text-xs whitespace-nowrap">
-                Space / Enter: Walk &nbsp;|&nbsp; P: Party
+                Space / Enter: 歩く &nbsp;|&nbsp; P: 手持ち
               </div>
             </div>
           )}

@@ -44,7 +44,6 @@ export default function MapView() {
     }
   }, [encountering, state.stepsTillEncounter, activePokemon, dispatch]);
 
-  // PC キーボードサポート
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); handleWalk(); }
@@ -60,7 +59,7 @@ export default function MapView() {
       <div className="flex items-center justify-between px-4 py-3 bg-gray-900/95 backdrop-blur border-b border-gray-700 z-10">
         <div>
           <div className="font-pixel text-yellow-400 text-xs">{state.playerName}</div>
-          <div className="text-gray-400 text-xs mt-0.5">Lv.{state.playerLevel} Trainer</div>
+          <div className="text-gray-400 text-xs mt-0.5">Lv.{state.playerLevel} トレーナー</div>
           <div className="w-24 mt-1">
             <div className="text-xs text-gray-500 mb-0.5">XP {state.playerXp}/{state.playerXpToNext}</div>
             <div className="h-1.5 bg-gray-700 rounded-full overflow-hidden">
@@ -100,14 +99,15 @@ export default function MapView() {
         {/* Steps overlay */}
         <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 bg-gray-900/80 backdrop-blur rounded-full px-4 py-1.5 border border-gray-700">
           <span className="font-pixel text-xs text-gray-300">
-            👣 {state.stepCount} steps &nbsp;|&nbsp; next: {state.stepsTillEncounter}
+            👣 {state.stepCount}歩 &nbsp;|&nbsp; あと: {state.stepsTillEncounter}歩
           </span>
         </div>
 
         {/* Wild encounter flash */}
         {encountering && wildPreview && (
           <div className="absolute inset-0 z-20 bg-black/75 flex flex-col items-center justify-center">
-            <div className="text-yellow-400 font-pixel text-sm mb-4 animate-bounce">Wild Pokémon!</div>
+            <div className="text-yellow-400 font-pixel text-sm mb-2 animate-bounce">野生のポケモンが現れた！</div>
+            <div className="text-gray-400 text-xs mb-4">Wild Pokémon appeared!</div>
             <img
               src={wildPreview.sprite}
               alt={wildPreview.name}
@@ -131,21 +131,21 @@ export default function MapView() {
                 : 'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-600/30 active:scale-95'
             }`}
           >
-            {encountering ? 'SEARCHING...' : '👣 WALK'}
+            {encountering ? '探索中...' : '👣 歩く / WALK'}
           </button>
           <button
             onClick={() => dispatch({ type: 'OPEN_PARTY' })}
             className="bg-gray-700 hover:bg-gray-600 text-white px-5 py-4 rounded-xl font-pixel text-xs transition-all active:scale-95"
           >
-            PARTY
+            手持ち
           </button>
         </div>
 
         {state.lastLevelUp && (
           <div className="mt-3 bg-yellow-900/50 border border-yellow-500 rounded-xl p-3 text-center animate-pulse">
             <div className="font-pixel text-yellow-400 text-xs">
-              {state.lastLevelUp.playerLevel && `★ TRAINER Lv.${state.lastLevelUp.playerLevel}! `}
-              {state.lastLevelUp.pokemonName && `${state.lastLevelUp.pokemonName.toUpperCase()} Lv.${state.lastLevelUp.pokemonLevel}!`}
+              {state.lastLevelUp.playerLevel && `★ トレーナー Lv.${state.lastLevelUp.playerLevel}！ `}
+              {state.lastLevelUp.pokemonName && `${state.lastLevelUp.pokemonName.toUpperCase()} Lv.${state.lastLevelUp.pokemonLevel}！`}
             </div>
             <button
               onClick={() => dispatch({ type: 'CLEAR_LEVEL_UP' })}

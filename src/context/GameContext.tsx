@@ -93,7 +93,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           answerResult: null,
           phase: 'quiz',
           result: null,
-          log: [`A wild ${wild.name.toUpperCase()} appeared!`, 'Answer the question to attack!'],
+          log: [`野生の ${wild.name.toUpperCase()} が現れた！`, '問題に答えて攻撃しよう！'],
           canCatch: false,
           turnCount: 0,
         };
@@ -109,8 +109,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const damage = calcDamage(pokemon.attack, b.wild.defense, action.correct);
       const newWildHp = Math.max(0, b.wildHp - damage);
       const hitMsg = action.correct
-        ? `You answered correctly! ${pokemon.name.toUpperCase()} dealt ${damage} damage!`
-        : `Wrong answer... ${pokemon.name.toUpperCase()}'s attack barely scratched (${damage} damage).`;
+        ? `正解！ ${pokemon.name.toUpperCase()} は ${damage} のダメージを与えた！`
+        : `不正解… ${pokemon.name.toUpperCase()} の攻撃は ${damage} ダメージしか入らなかった。`;
 
       if (newWildHp <= 0) {
         // Win: award XP
@@ -150,7 +150,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             result: 'win',
             canCatch: true,
             answerResult: action.correct ? 'correct' : 'wrong',
-            log: [...b.log, hitMsg, `Wild ${b.wild.name.toUpperCase()} fainted! You won! +${xpGain} XP`],
+            log: [...b.log, hitMsg, `野生の ${b.wild.name.toUpperCase()} は倒れた！勝利！ +${xpGain} XP`],
             currentQuestion: action.nextQuestion,
           },
         };
@@ -159,7 +159,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       // Wild's turn after player attack
       const wildDamage = calcDamage(b.wild.attack, pokemon.defense, true);
       const newPlayerHp = Math.max(0, b.playerHp - wildDamage);
-      const wildMsg = `Wild ${b.wild.name.toUpperCase()} attacks! ${wildDamage} damage!`;
+      const wildMsg = `野生の ${b.wild.name.toUpperCase()} の攻撃！ ${wildDamage} ダメージ！`;
 
       if (newPlayerHp <= 0) {
         // Faint: set HP to 1 (not 0) so player isn't stuck
@@ -175,7 +175,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             phase: 'over',
             result: 'lose',
             answerResult: action.correct ? 'correct' : 'wrong',
-            log: [...b.log, hitMsg, wildMsg, `${pokemon.name.toUpperCase()} fainted! You lost...`],
+            log: [...b.log, hitMsg, wildMsg, `${pokemon.name.toUpperCase()} は倒れた！負けた…`],
             currentQuestion: action.nextQuestion,
           },
         };

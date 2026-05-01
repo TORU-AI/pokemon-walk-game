@@ -30,10 +30,12 @@ export interface WildPokemon {
 export interface Question {
   id: string;
   context: string;
+  contextJa?: string;
   question: string;
   choices: [string, string, string, string];
   correctIndex: 0 | 1 | 2 | 3;
   explanation: string;
+  explanationJa?: string;
   difficulty: 1 | 2 | 3 | 4 | 5;
 }
 
