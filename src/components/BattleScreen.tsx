@@ -3,6 +3,33 @@ import { useGame } from '../context/GameContext';
 import { getRandomQuestion } from '../data/questions';
 import { TYPE_COLORS } from '../services/pokeapi';
 
+function TrainerSilhouette({ fainted }: { fainted: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 48 72"
+      className={`w-20 h-20 ${fainted ? 'opacity-30 rotate-90' : ''}`}
+      style={{ transition: 'opacity 0.3s' }}
+    >
+      {/* Hat top */}
+      <rect x="16" y="2" width="16" height="10" rx="2" fill="#111827" />
+      {/* Hat brim */}
+      <rect x="10" y="11" width="28" height="4" rx="1" fill="#1f2937" />
+      {/* Head */}
+      <ellipse cx="24" cy="22" rx="9" ry="10" fill="#1f2937" />
+      {/* Body */}
+      <path d="M12 32 Q24 28 36 32 L34 54 H14 Z" fill="#111827" />
+      {/* Left arm */}
+      <line x1="12" y1="34" x2="2" y2="50" stroke="#111827" strokeWidth="6" strokeLinecap="round" />
+      {/* Right arm */}
+      <line x1="36" y1="34" x2="46" y2="50" stroke="#111827" strokeWidth="6" strokeLinecap="round" />
+      {/* Left leg */}
+      <line x1="17" y1="54" x2="14" y2="70" stroke="#1f2937" strokeWidth="7" strokeLinecap="round" />
+      {/* Right leg */}
+      <line x1="31" y1="54" x2="34" y2="70" stroke="#1f2937" strokeWidth="7" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function HpBar({ current, max, label }: { current: number; max: number; label: string }) {
   const pct = Math.max(0, (current / max) * 100);
   const color = pct > 50 ? 'bg-green-500' : pct > 25 ? 'bg-yellow-400' : 'bg-red-500';
@@ -83,16 +110,12 @@ export default function BattleScreen() {
           />
         </div>
 
-        {/* Player Pokémon */}
+        {/* Player trainer */}
         <div className="flex justify-between items-end mt-2">
-          <img
-            src={playerPokemon.sprite}
-            alt={playerPokemon.name}
-            className={`w-20 h-20 object-contain ${isOver && battle.result === 'lose' ? 'opacity-30 rotate-90' : ''}`}
-            style={{ imageRendering: 'pixelated', transform: 'scaleX(-1)' }}
-          />
+          <TrainerSilhouette fainted={isOver && battle.result === 'lose'} />
           <div className="w-44 text-right">
-            <div className="font-pixel text-xs capitalize mb-1">{playerPokemon.name}</div>
+            <div className="font-pixel text-xs text-yellow-400 mb-0.5">{state.playerName}</div>
+            <div className="font-pixel text-xs capitalize text-gray-300 mb-1">{playerPokemon.name}</div>
             <div className="flex gap-1 justify-end mb-2">
               <span className="bg-gray-700 text-xs text-gray-300 px-1.5 py-0.5 rounded">Lv.{playerPokemon.level}</span>
             </div>
